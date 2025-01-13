@@ -1,5 +1,22 @@
 # AWS Identity and Access Management (IAM) Best Practices
 
+## Contents
+
+1. [Principle of Least Privilege](#1-principle-of-least-privilege)
+   - [Overview](#11-overview)
+   - [Implementation](#12-implementation)
+2. [Avoiding Wildcards in Action and Resource Elements](#2-avoiding-wildcards-in-action-and-resource-elements)
+   - [Overview](#21-overview)
+   - [Implementation](#22-implementation)
+3. [Policy Management](#3-policy-management)
+   - [Use Managed Policies](#31-use-managed-policies)
+   - [Inline Policies](#32-inline-policies)
+4. [Policy Review and Audit](#4-policy-review-and-audit)
+   - [Regular Audits](#41-regular-audits)
+   - [Logging and Monitoring](#42-logging-and-monitoring)
+5. [Conclusion](#5-conclusion)
+6. [AWS Recommendations](#aws-recommendations)
+
 ## 1. Principle of Least Privilege
 
 ### 1.1 Overview

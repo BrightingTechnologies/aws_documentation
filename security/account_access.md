@@ -1,5 +1,19 @@
 # AWS Account Access
 
+## Contents
+
+1. [Logging in to AWS Console](#1-logging-in-to-aws-console)
+   - [Access AWS Identity Center](#11-access-aws-identity-center)
+     - [Navigate to the AWS Identity Center Portal](#111-navigate-to-the-aws-identity-center-portal)
+     - [Select Account and Role](#112-select-account-and-role)
+     - [Launch the Console](#113-launch-the-console)
+2. [Obtain Temporary Credentials for AWS CLI](#2-obtain-temporary-credentials-for-aws-cli)
+   - [Configure AWS CLI for AWS Identity Center](#21-configure-aws-cli-for-aws-identity-center)
+   - [Use Temporary Credentials from AWS Identity Center for Programmatic Access](#22-use-temporary-credentials-from-aws-identity-center-for-programmatic-access)
+     - [Obtain Temporary Credentials from AWS Identity Center](#221-obtain-temporary-credentials-from-aws-identity-center)
+     - [Copy the Temporary Credentials](#222-copy-the-temporary-credentials)
+     - [Configure AWS CLI with Temporary Credentials](#223-configure-aws-cli-with-temporary-credentials)
+
 ## Logging in to AWS Console
 
 Logging in to AWS Console should be done exclusively with:
