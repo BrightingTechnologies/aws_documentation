@@ -62,8 +62,17 @@ Steps to Follow:
 
 ## 3. Configure AWS CLI with Temporary Credentials
 
-- Open your terminal and run the following command to configure the AWS CLI:
+- Open your terminal and run the following command:
   ```bash
-  aws configure
+  aws s3 ls
   ```
-- Execute aws cli commands
+
+# AWS Recommendations
+
+Throughout the years AWS has developed the best practices for using IAM in the most secure way possible
+
+Review them in their official documentation:
+
+- [Security Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html?link_from_packtlink=yes)
+- [Root User Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html)
+- [Business Use Cases](https://docs.aws.amazon.com/IAM/latest/UserGuide/business-use-cases.html)
