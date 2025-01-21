@@ -2,11 +2,12 @@
 
 - [Purpose](#purpose)
 - [Scope](#scope)
-- [Encryption at rest](#1-encryption-at-rest)
-  - [AWS Key Management Service](##1-aws-key-management-service)
-  - [Storage](##2-storage)
-  - [Secure configuration management](##3-secure-configuration-management)
-- [Encryption in transit](#2-encryption-in-transit)
+- [Encryption at rest](#encryption-at-rest)
+  - [AWS Key Management Service](#1-aws-key-management-service-kms)
+  - [Storage](#2-storage)
+  - [Secure configuration management](#3-secure-configuration-management)
+- [Encryption in transit](#encryption-in-transit)
+- [AWS Well-Architected framework](#aws-well-architected-framework)
 
 
 ---
