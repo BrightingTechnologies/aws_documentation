@@ -61,7 +61,7 @@ These best practices apply to all AWS accounts under the management of [Company 
   - Use Account Factory to set up new accounts.
   - Apply baseline security policies and guardrails upon account creation.
 
-### Account Creation Checklist
+### OU Account Creation Checklist
 
 - [ ] Submit an account request to the Cloud Governance Team.
 - [ ] Use AWS Control Tower to set up the new account.

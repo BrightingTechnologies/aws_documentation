@@ -25,9 +25,9 @@ Content is to be updated as documents are created
        (Temp credentials, Programmatic access, Identities)  
        [Link](https://app.clickup.com/t/86c1k94t1)
 
-- [Y] **AWS Governance**  
-  (Root account usage, MFA setup, contact details, CloudTrail logs and CloudTrail logs protection)  
-  [Link](https://app.clickup.com/t/86c1k8h1z)
+- [x] **AWS Governance**  
+      (Root account usage, MFA setup, contact details, CloudTrail logs and CloudTrail logs protection)  
+      [Link](https://app.clickup.com/t/86c1k8h1z)
 
 - [ ] **Workload KPIs**  
        (Collecting, analyzing and defining metrics, exporting logs, Defining threshold operational metrics)  
