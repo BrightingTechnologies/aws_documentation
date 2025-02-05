@@ -38,12 +38,47 @@ You can work with the AWS KMS service using the following:
 - [AWS KMS REST API](https://docs.aws.amazon.com/kms/latest/APIReference/Welcome.html)
 - [AWS SDK](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/introduction.html)
 
-How to use AWS KMS:
-- Check if the [integration with AWS KMS](https://aws.amazon.com/kms/features/#AWS_Service_Integration) exists for the service you are working with
-- Follow the [implementation steps](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_rest_key_mgmt.html#implementation-steps
-) in order to create and set up the key
-- Set up the [key policy](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html#intro-key-policy) for the key
-- Follow the [best practices](https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices/kms.html)
+Best practices for AWS KMS encryption can be found [here](https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices/kms.html).
+
+There are 2 types of AWS KMS keys:
+- [AWS managed keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk) - fully managed by AWS, the user does not have direct control over their creation or lifecycle
+- [Customer managed keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk) - explicitly created by the user in the AWS KMS console, CLI or SDK, also the user has full control over their creation, configuration, and lifecycle
+
+How to set up the customer managed key and use it for encryption of AWS Secrets Manager secret:
+- In the AWS Management Console go to the AWS Key Management Service page
+- Click 'Create a key' button
+- In the first step you need to configure the key
+  - For the key type pick 'Symmetric'
+  - For the key usage pick 'Encrypt and decrypt'
+  - In the advanced options, for the key material origin pick 'KMS'
+  - In the advanced options, for the regionality origin pick 'Single-Region key'
+- In the second step you need to add labels
+  - For the alias input enter the display name for the key
+  - Optional - for the description input enter the description for the key
+  - Optional - for the tags input add as many tags as you need by entering the tag keys and the tag values
+- Optional - in the third step you can define key administrative permissions
+  - For the key administrators select the IAM users and roles authorized to manage this key via the KMS API
+  - Depending on your use case, allow or deny key administrators to delete this key
+- Optional - in the fourth step you can define key usage permissions
+  - For the key users select the IAM users and roles authorized to use this key in cryptographic operations
+  - Depending on your use case, for the other AWS accounts add another AWS account that can use this key
+- Optional - in the fifth step you can preview and edit the key policy
+  - To review the key policy statements for this key select 'Preview' in the toggle
+  - To manually update this policy select 'Edit' in the toggle
+- In the last step you need to review everything
+  - Review all the configured properties and click on 'Finish' button when ready
+- In the AWS Management Console go to the AWS Secrets Manager page
+- Click 'Store a new secret' button
+- For the encryption key choose the one that was created in the previous steps
+- Proceed with the remaining steps needed for secret creation
+
+How to set up the AWS managed key and use it for encryption of AWS Secrets Manager secret:
+- AWS Managed Keys are automatically created by AWS by an AWS service integrated with AWS KMS
+- In the AWS Management Console go to the AWS Secrets Manager page
+- Click 'Store a new secret' button
+- For the encryption key choose the AWS Managed Key
+  - AWS Managed Keys have names that indicate the service they are associated with - choose the 'aws/secretsmanager' key
+- Proceed with the remaining steps needed for secret creation
 
 ## 2. AWS Secrets Manager
 
