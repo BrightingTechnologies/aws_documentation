@@ -36,3 +36,9 @@ Purpose of this document is to define steps needed to create a new customer AWS 
 1. Login to console as ROOT user.
 2. In the upper right corner of the console, click on the drop down and select "Security Credentials".
 3. In the Multi-factor authentication section, assign devices for all required users. Up to 8 MFA devices can be assigned to the root user.
+
+## Next steps:
+
+- IAM Identity center
+- CloudTrail setup
+- AWS Organisations
