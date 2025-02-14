@@ -12,25 +12,85 @@ Serverless architectures require a different approach to health metrics, as reso
 
 **Key Workload Health Metrics for Serverless to Track:**
 
-**Lambda Invocation Metrics:**
+**Lambda Metrics Examples:**
 
-- Invocation Count: Total number of Lambda invocations.
-- Duration: The amount of time it takes for Lambda functions to execute.
-- Errors: The number of failed invocations due to errors or timeouts.
-- Throttles: The number of times Lambda functions are throttled due to concurrency limits.
-- IteratorAge (for stream-based invocations): The age of the last record read by the Lambda function when processing SQS or DynamoDB streams.
+In the following table we have listed some of the more important Lambda metrics.
+
+**Full list is available at:** [Lambda Monitoring Metrics Types](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html)
+
+| **Metric Name**                 | **Description**                                                                                                                        |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Duration**                    | The amount of time it takes for Lambda functions to execute.                                                                           |
+| **Error count**                 | The number of failed invocations due to errors or timeouts.                                                                            |
+| **Throttles**                   | The number of times Lambda functions are throttled due to concurrency limits.                                                          |
+| **IteratorAge** (stream-based)  | The age of the last record read by the Lambda function when processing SQS or DynamoDB streams.                                        |
+| **Async event age**             | Time between Lambda successfully queues the event and when the function is invoked. Increase in this metric indicates execution errors |
+| **Total concurrent executions** | Number of functions that are processing events                                                                                         |
+| **Async events dropped**        | Number of events dropped without executing the function successfully                                                                   |
+
+**Establishing baseline values**
+
+1. **Understanding the Application**
+
+   - What is the primary function of this Lambda?
+   - Is it user-facing or a background process?
+   - How critical is its performance to the overall system?
+
+2. **Performance Expectations**
+
+   - What is the expected execution time under normal conditions?
+   - How does performance change under peak loads?
+   - How often does the function experience cold starts?
+
+3. **Error Handling & Tolerance**
+
+   - What is an acceptable error rate?
+   - What types of failures are most likely to occur?
+   - How do errors impact downstream services?
+
+4. **Scaling and Traffic Patterns**
+
+   - How does invocation frequency change over time?
+   - What are the peak and off-peak usage periods?
+   - How should concurrency limits be set?
+
+5. **Resource Utilization**
+
+   - How much memory does the function typically use?
+   - Are there frequent out-of-memory errors?
+   - Is the allocated memory optimized for performance and cost?
+
+6. **Cost Considerations**
+
+   - What is the cost impact of different execution times?
+   - Are there optimizations that could reduce Lambda execution costs?
+
+7. **Alerting and Monitoring**
+   - What threshold values should trigger warnings or alerts?
+   - What metrics should be monitored continuously?
+   - How quickly should alerts be acted upon?
 
 **SQS Metrics:**
 
-- Queue Length: The number of messages in the SQS queue.
-- Message Age: The age of the oldest message in the queue.
-- Receive Message Count: Number of messages received by the queue.
-- Deleted Message Count: Number of messages deleted after being processed.
+In the following table we have listed some of the more important SQS metrics.
+
+**Full list of SQS metrics:** [Amazon SQS Metrics](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-available-cloudwatch-metrics.html)
+
+| **Metric Name**                         | **Description**                                                                                                                    |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **Approximate age of oldest message**   | Age of the oldest message. Messages older than configurable duration will be deleted. Maximum age of message is 14 days            |
+| **Approximate age of visible messages** | Number of messages to be processed. Increase in this metric suggests that the messages are lingering in queue longer than expected |
+| **Number of empty receives**            | Shows how many times has the polling mechanism returned empty result                                                               |
 
 **SNS Metrics:**
 
-- Delivery Failures: The number of failed attempts to deliver SNS messages to subscribed endpoints.
-- Message Count: Total number of messages published to SNS topics.
+**Full list of metrics is available at:** [Amazon SNS Monitoring](https://docs.aws.amazon.com/sns/latest/dg/sns-monitoring-using-cloudwatch.html)
+
+| **Metric Name**                            | **Description**                                                                |
+| ------------------------------------------ | ------------------------------------------------------------------------------ |
+| **Delivery Failures**                      | The number of failed attempts to deliver SNS messages to subscribed endpoints. |
+| **Message Count**                          | Total number of messages published to SNS topics.                              |
+| **Number of messages with bad attributes** | Number of messages with malformed structure.                                   |
 
 **API Gateway Metrics:**
 
