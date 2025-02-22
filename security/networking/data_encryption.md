@@ -26,7 +26,107 @@ These best practices and guidelines apply to all projects under the management o
 
 # Encryption at rest
 
-Data at rest refers to digital information stored in non-volatile computer storage devices in various forms for any duration. This type of data faces risks from malicious actors attempting to access it. To [protect data at rest](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/protecting-data-at-rest.html) from unauthorized access, modification or theft organizations need to implement data encryption.
+Data at rest refers to digital information stored in non-volatile computer storage devices in various forms for any duration. 
+This type of data faces risks from malicious actors attempting to access it. 
+To [protect data at rest](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/protecting-data-at-rest.html) from unauthorized 
+access, modification or theft organizations we need to enable and enforce encryption at rest.
+
+## Enforcing encryption at rest
+
+## 1. Service Control Policies (SCPs)
+
+In the accounts that use AWS Organizations we can use Service Control Policies to enforce encryption at rest.
+
+  ```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EnforceS3Encryption",
+      "Effect": "Deny",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::*/*",
+      "Condition": {
+        "StringNotEquals": {
+          "s3:x-amz-server-side-encryption": "aws:kms"
+        }
+      }
+    },
+    {
+      "Sid": "EnforceEBSEncryption",
+      "Effect": "Deny",
+      "Action": "ec2:CreateVolume",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "ec2:Encrypted": "false"
+        }
+      }
+    },
+    {
+      "Sid": "EnforceRDSEncryption",
+      "Effect": "Deny",
+      "Action": "rds:CreateDBInstance",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "rds:StorageEncrypted": "false"
+        }
+      }
+    }
+  ]
+}
+   ```
+## 2. Restricting individual users or groups
+
+By using IAM policies.
+
+Example IAM Policy to Require Encryption for S3:
+
+  ```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::my-secure-bucket/*",
+      "Condition": {
+        "StringNotEqualsIfExists": {
+          "s3:x-amz-server-side-encryption": "AES256"
+        }
+      }
+    }
+  ]
+}
+   ```
+
+## 3. Enforcing encryption at the resource level
+
+By using bucket policies, KMS policies, EBS policies...
+
+Example: S3 Bucket Policy to Enforce KMS Encryption
+  ```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyUnencryptedObjectUploads",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::my-secure-bucket/*",
+      "Condition": {
+        "StringNotEquals": {
+          "s3:x-amz-server-side-encryption": "aws:kms"
+        }
+      }
+    }
+  ]
+}
+   ```
+
+## Configuring encryption for different AWS services
 
 ## 1. AWS Key Management Service (KMS)
 
@@ -127,9 +227,9 @@ Important:
 - Have in mind that there are certain [limitations](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html#Overview.Encryption.Limitations) for Amazon RDS encrypted DB instances
 
 ### 4. Amazon DynamoDB
-[DynamoDB encryption at rest](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EncryptionAtRest.html) provides enhanced security by encrypting all your data at rest using encryption keys stored in AWS KMS.
+Server-side [encryption at rest](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EncryptionAtRest.html) is enabled by default on all DynamoDB table data and cannot be disabled.
 
-Follow the [implementation steps](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/encryption.tutorial.html) in order to specify the encryption key on new tables and update the encryption keys on existing tables.
+DynamoDB uses keys stored in AWS KMS are used for encryption. Follow the [implementation steps](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/encryption.tutorial.html) in order to specify the encryption key on new tables and update the encryption keys on existing tables.
 
 When creating a new table, you can choose one of the following AWS KMS key types to encrypt your table (you can switch between these key types at any time):
 - [AWS owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk) – Default encryption type. The key is owned by DynamoDB
