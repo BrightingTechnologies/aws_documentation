@@ -94,15 +94,13 @@ In the following table we have listed some of the more important SQS metrics.
 
 **API Gateway Metrics:**
 
-- Request Count: Total number of API requests processed.
-- Latency: The amount of time taken for an API request to be processed.
-- 5xx/4xx Error Rate: The rate of client and server errors from API Gateway.
+**Complete list of metrics** [API Gateway Metrics](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-metrics-and-dimensions.html)
 
-**S3 Metrics:**
-
-- PutObject Requests: Total number of objects uploaded to S3.
-- GetObject Requests: Total number of objects accessed from S3.
-- Error Rates: Failures related to S3 operations.
+| **Metric Name**        | **Description**                                              |
+| ---------------------- | ------------------------------------------------------------ |
+| **Request Count**      | Total number of API requests processed.                      |
+| **Latency**            | The amount of time taken for an API request to be processed. |
+| **5xx/4xx Error Rate** | The rate of client and server errors from API Gateway.       |
 
 ### 2.2. Collecting Metrics with AWS Services
 
@@ -146,35 +144,3 @@ Application logs are essential for troubleshooting and error resolution in a ser
 - Centralize logs from Lambda, API Gateway, and other services using CloudWatch Logs groups.
 - Use CloudWatch Logs Insights for querying and analyzing log data for troubleshooting.
 - Enable log retention policies to manage storage and ensure compliance.
-
-## 4. Defining Operational Metrics Thresholds and Alerts
-
-### 4.1. Operational Metrics and Thresholds
-
-Defining thresholds for operational metrics ensures that issues are detected before they impact users. Setting appropriate thresholds for key metrics allows you to receive timely alerts when performance deviates from the norm.
-
-**Key Thresholds to Define:**
-
-- **Lambda Duration:** Set alerts for high invocation durations (e.g., > 5 seconds) to identify performance bottlenecks.
-- **Lambda Errors:** Trigger alerts when the error count exceeds a threshold (e.g., more than 5% of invocations).
-- **API Gateway Latency:** Trigger alerts when API latency exceeds a threshold (e.g., 2 seconds).
-- **SQS Queue Length:** Alert if the queue length exceeds a threshold, indicating backlog or delays in processing.
-- **SNS Delivery Failures:** Set thresholds for delivery failures (e.g., more than 1% of messages fail delivery).
-- **S3 Error Rate:** Monitor and alert for failed S3 operations.
-
-### 4.2. Creating Alerts in AWS
-
-- **Amazon CloudWatch Alarms:** Set up alarms to monitor Lambda, API Gateway, SQS, SNS, and S3 metrics. CloudWatch can trigger notifications via SNS to alert you about any issues.
-- **AWS Lambda & CloudWatch Events:** Automatically take corrective actions when certain thresholds are breached (e.g., invoke a Lambda function to handle retries).
-- **Amazon SNS:** Send notifications to the appropriate team or system when a threshold is breached, using SNS for SMS, email, or integrations with third-party tools like Slack.
-
-### 4.3. Best Practices for Defining Thresholds and Alerts
-
-- Define baselines based on historical data to avoid false alerts.
-- Set actionable alerts to minimize noise and ensure timely response (e.g., critical alerts for Lambda throttling and errors).
-- Use anomaly detection in CloudWatch to automatically adjust thresholds based on traffic patterns.
-- Integrate alerting systems with automated remediation workflows where possible.
-
-## 5. Conclusion
-
-By defining workload health metrics, exporting application logs, and setting up operational thresholds for your serverless architecture, you can maintain the health and performance of your AWS serverless applications. Monitoring Lambda functions, SQS, SNS, S3, and API Gateway helps ensure a smooth operational flow, detect issues early, and maintain a high level of reliability and scalability.
