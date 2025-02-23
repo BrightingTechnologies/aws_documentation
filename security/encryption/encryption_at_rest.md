@@ -66,12 +66,19 @@ The following policy prevents all users from creating unencrypted AWS RDS cluste
 
 The following policy restricts all users from disabling the default Amazon EBS Encryption.
   ```json
+
 {
-  "Effect": "Deny",
-  "Action": [
-    "ec2:DisableEbsEncryptionByDefault"
-  ],
-  "Resource": "*"
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "RestrictDisablingOfEbsEncryption",
+      "Effect": "Deny",
+      "Action": [
+        "ec2:DisableEbsEncryptionByDefault"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
    ```
 
