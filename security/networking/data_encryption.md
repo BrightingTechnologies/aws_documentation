@@ -37,37 +37,21 @@ access, modification or theft organizations we need to enable and enforce encryp
 
 In the accounts that use AWS Organizations we can use Service Control Policies to enforce encryption at rest.
 
+The following policy prevents all users from creating unencrypted AWS RDS cluster.
+ 
   ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "EnforceS3Encryption",
+      "Sid": "EnforceRDSClusterEncryption",
       "Effect": "Deny",
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::*/*",
-      "Condition": {
-        "StringNotEquals": {
-          "s3:x-amz-server-side-encryption": "aws:kms"
-        }
-      }
-    },
-    {
-      "Sid": "EnforceEBSEncryption",
-      "Effect": "Deny",
-      "Action": "ec2:CreateVolume",
-      "Resource": "*",
-      "Condition": {
-        "Bool": {
-          "ec2:Encrypted": "false"
-        }
-      }
-    },
-    {
-      "Sid": "EnforceRDSEncryption",
-      "Effect": "Deny",
-      "Action": "rds:CreateDBInstance",
-      "Resource": "*",
+      "Action": [
+        "rds:CreateDBCluster"
+      ],
+      "Resource": [
+        "*"
+      ],
       "Condition": {
         "Bool": {
           "rds:StorageEncrypted": "false"
@@ -77,50 +61,37 @@ In the accounts that use AWS Organizations we can use Service Control Policies t
   ]
 }
    ```
-## 2. Restricting individual users or groups
 
-By using IAM policies.
-
-Example IAM Policy to Require Encryption for S3:
-
+The following policy restricts all users from disabling the default Amazon EBS Encryption.
   ```json
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::my-secure-bucket/*",
-      "Condition": {
-        "StringNotEqualsIfExists": {
-          "s3:x-amz-server-side-encryption": "AES256"
-        }
-      }
-    }
-  ]
+  "Effect": "Deny",
+  "Action": [
+    "ec2:DisableEbsEncryptionByDefault"
+  ],
+  "Resource": "*"
 }
    ```
 
-## 3. Enforcing encryption at the resource level
+## 2. IAM identity-based policy
 
-By using bucket policies, KMS policies, EBS policies...
+We can use IAM policies for individual users or groups to enforce encryption at rest.
 
-Example: S3 Bucket Policy to Enforce KMS Encryption
+The following example illustrates an IAM identity-based policy that authorizes principals to create only encrypted file systems:
   ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "DenyUnencryptedObjectUploads",
-      "Effect": "Deny",
-      "Principal": "*",
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::my-secure-bucket/*",
+      "Sid": "EnforceEFSEncryption",
+      "Effect": "Allow",
+      "Action": "elasticfilesystem:CreateFileSystem",
       "Condition": {
-        "StringNotEquals": {
-          "s3:x-amz-server-side-encryption": "aws:kms"
+        "Bool": {
+          "elasticfilesystem:Encrypted": "true"
         }
-      }
+      },
+      "Resource": "*"
     }
   ]
 }
