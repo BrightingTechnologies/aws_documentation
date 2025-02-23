@@ -1,5 +1,14 @@
 # Serverless Workload Health Metrics, Logs, and Alerts Documentation
 
+## Contents
+
+1. [Introduction](#1-introduction)
+2. [Defining and Collecting Workload Health Metrics for Serverless Applications](#2-defining-and-collecting-workload-health-metrics-for-serverless-applications)
+   - [Workload Health Metrics Overview](#21-workload-health-metrics-overview)
+   - [Collecting Metrics with AWS Services](#22-collecting-metrics-with-aws-services)
+   - [Best Practices for Collecting Metrics](#23-best-practices-for-collecting-metrics)
+
+
 ## 1. Introduction
 
 This document outlines the process for defining, collecting, and analyzing workload health metrics, exporting standard application logs for error tracking, and defining operational thresholds to generate alerts for serverless architectures. These practices ensure that serverless workloads, primarily using AWS Lambda, SQS, SNS, S3, and API Gateway, are performing optimally, any issues are detected early, and necessary actions are taken for seamless operations.
@@ -116,31 +125,3 @@ AWS offers several tools to collect, monitor, and analyze metrics in serverless 
 - Use CloudWatch Dashboards to visualize key metrics such as Lambda errors, queue length, and API Gateway latency.
 - Monitor SNS delivery failures to ensure reliable message delivery.
 - Implement CloudWatch custom metrics where necessary to track application-specific metrics beyond standard AWS metrics.
-
-## 3. Exporting Application Logs for Error Tracking and Troubleshooting
-
-### 3.1. Application Logs Overview
-
-Application logs are essential for troubleshooting and error resolution in a serverless environment. These logs provide visibility into Lambda invocations, API calls, and events in SQS, SNS, and S3.
-
-**Types of Logs to Export:**
-
-- **Lambda Logs:** Logs related to Lambda invocations, including errors, execution time, and custom log statements. These logs are captured in Amazon CloudWatch Logs.
-- **API Gateway Logs:** Logs detailing incoming requests, response times, and errors from API Gateway, useful for monitoring API performance.
-- **SQS Logs:** Logs showing the receipt, processing, and deletion of messages in SQS queues.
-- **SNS Logs:** Logs that detail message publication and delivery attempts.
-- **S3 Logs:** Access logs related to requests for objects in S3.
-
-### 3.2. Exporting Logs Using AWS Services
-
-- **CloudWatch Logs:** Capture and export Lambda logs, API Gateway logs, and custom logs for serverless applications.
-- **S3 Logging:** Enable S3 access logs to track user requests to your S3 buckets. This can be directed to a specific S3 bucket for analysis.
-- **API Gateway Logging:** Enable access logging and execution logging for API Gateway to monitor HTTP request and response data.
-- **AWS Lambda Logging:** Automatically sends logs to CloudWatch Logs. You can configure log retention policies to manage log data.
-
-### 3.3. Best Practices for Exporting Logs
-
-- Ensure structured logging (e.g., JSON format) for easier parsing and filtering.
-- Centralize logs from Lambda, API Gateway, and other services using CloudWatch Logs groups.
-- Use CloudWatch Logs Insights for querying and analyzing log data for troubleshooting.
-- Enable log retention policies to manage storage and ensure compliance.
