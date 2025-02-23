@@ -47,5 +47,5 @@ export class InvocationErrorsAlarm extends Construct {
 }
 ```
 
-When an alarm triggers, it sends an event to an SNS topic. This example uses a Lambda listener that executes an API call to PagerDuty to create an incident. Similarly, other incident management services can be integrated in the same way by modifying the Lambda function to call their respective APIs. Additionally, AWS provides native integrations for various incident management tools, such as Opsgenie and ServiceNow, through EventBridge and other AWS services.
+When an alarm triggers, it sends an event to an SNS topic. In this example, Lambda is listening to the SNS topic and executes an API call on the Pagerduty API. Similarly, other incident management services can be integrated in the same way by modifying the Lambda function to call their respective APIs. Additionally, AWS provides native integrations for various incident management tools, such as Opsgenie and ServiceNow, through EventBridge and other AWS services.
 
