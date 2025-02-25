@@ -6,6 +6,7 @@
   - [Enforcing encryption at rest](#enforcing-encryption-at-rest)
     - [Service Control Policies (SCPs)](#1-service-control-policies-scps)
     - [IAM identity-based policy](#2-iam-identity-based-policy)
+    - [Resource policy](#3-resource-policy)
   - [Configuring encryption for different AWS services](#configuring-encryption-for-different-aws-services)
     - [AWS Key Management Service](#1-aws-key-management-service-kms)
     - [AWS Secrets Manager](#2-aws-secrets-manager)
@@ -20,7 +21,7 @@
 
 # Purpose
 
-This document defines best practices and guidelines for setting up data encryption policy for data at rest and in transit.
+This document defines best practices and guidelines for setting up data encryption policy for data at rest.
 
 # Scope
 
@@ -84,7 +85,7 @@ The following policy restricts all users from disabling the default Amazon EBS E
 
 ### 2. IAM identity-based policy
 
-For the accounts that don't use AWS Organizations we can use IAM policies for individual users or groups to enforce encryption at rest.
+Use IAM policies for individual users or groups to enforce encryption at rest.
 
 The following example illustrates an IAM identity-based policy that authorizes principals to create only encrypted file systems:
   ```json
@@ -105,6 +106,52 @@ The following example illustrates an IAM identity-based policy that authorizes p
   ]
 }
    ```
+
+### 3. Resource policy
+
+Use resource policies to enforce encryption at rest at resource level (Amazon S3 buckets, Amazon SQS queues, VPC endpoints...).
+
+The following example policy requires every object that is written to the bucket to be encrypted with server-side encryption using AWS Key Management Service (AWS KMS) keys (SSE-KMS):
+  ```json
+{
+  "Version": "2012-10-17",
+  "Id": "PutObjPolicy",
+  "Statement": [{
+    "Sid": "DenyObjectsThatAreNotSSEKMS",
+    "Principal": "*",
+    "Effect": "Deny",
+    "Action": "s3:PutObject",
+    "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*",
+    "Condition": {
+      "Null": {
+        "s3:x-amz-server-side-encryption-aws-kms-key-id": "true"
+      }
+    }
+  }]
+}
+   ```
+
+The following example policy denies any objects from being written to the bucket if they aren’t encrypted with SSE-KMS by using a specific KMS key ID:
+  ```json
+{
+  "Version": "2012-10-17",
+  "Id": "PutObjPolicy",
+  "Statement": [{
+    "Sid": "DenyObjectsThatAreNotSSEKMSWithSpecificKey",
+    "Principal": "*",
+    "Effect": "Deny",
+    "Action": "s3:PutObject",
+    "Resource": "arn:aws:s3:::amzn-s3-demo-bucket/*",
+    "Condition": {
+      "ArnNotEqualsIfExists": {
+        "s3:x-amz-server-side-encryption-aws-kms-key-id": "arn:aws:kms:us-east-2:111122223333:key/01234567-89ab-cdef-0123-456789abcdef"
+      }
+    }
+  }]
+}
+   ```
+
+List of services that support resource-based policies can be found [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html).
 
 ## Configuring encryption for different AWS services
 
