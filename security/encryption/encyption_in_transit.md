@@ -7,10 +7,15 @@
       - [Security group](#1-security-group)
       - [VPN](#2-vpn)
       - [Resource policy](#3-resource-policy)
-    - [Configuring encryption for different AWS services](#configuring-encryption-for-different-aws-services)
-      - [CloudFront](#1-cloudfront)
+      - [AWS Certificate Manager](#4-aws-certificate-manager)
+    - [Traffic encryption in endpoints exposed to the Internet](#traffic-encryption-in-endpoints-exposed-to-the-internet)
+      - [API Gateway endpoints](#1-api-gateway-endpoints)
+      - [Application Load Balancer endpoints](#2-application-load-balancer-endpoints)
+      - [Lambda Function URLs](#3-lambda-function-urls)
+      - [CloudFront](#4-cloudfront)
+    - [Traffic encryption in processes that make requests to external endpoints over the Internet](#traffic-encryption-in-processes-that-make-requests-to-external-endpoints-over-the-internet)
+      - [Lambda](#1-lambda)
       - [S3](#2-s3)
-      - [AWS Certificate Manager (ACM)](#3-aws-certificate-manager-acm)
 
 ---
 
@@ -25,10 +30,7 @@ These best practices and guidelines apply to all projects under the management o
 # Encryption in transit
 
 Data in transit is any data that is sent from one system to another. This includes communication 
-between resources within your workload as well as communication between other services and your end users.
-To [protect data in transit](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/protecting-data-in-transit.html)
-organizations we need to enforce encryption in transit and provide the appropriate level of protection for communication
-between resources.
+between resources within your workload as well as communication between other services and your end users. To [protect data in transit](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/protecting-data-in-transit.html) organizations we need to enforce encryption in transit and provide the appropriate level of protection for communication between resources.
 
 ## Enforcing encryption in transit
 
@@ -102,18 +104,56 @@ In the following example, the bucket policy explicitly denies HTTP requests:
 
 List of services that support resource-based policies can be found [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html).
 
-## Configuring encryption for different AWS services
+### 4. AWS Certificate Manager
 
-### 1. CloudFront
+By using ACM (AWS Certificate Manager), you obtain and manage SSL/TLS certificates that you then associate with your endpoints. This ensures that all traffic between your clients and your services (whether through ALB, API Gateway, or CloudFront) is encrypted in transit.
 
-Configure secure protocols in edge services - CloudFront:
-- To require that viewers use HTTPS so that connections are encrypted when CloudFront communicates with viewers 
-- To use HTTPS with your origin so that connections are encrypted when CloudFront communicates with your origin
+AWS Certificate Manager best practices can be found [here](https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html).
 
-To enforce HTTPS:
+## Traffic encryption in endpoints exposed to the Internet
+
+### 1. API Gateway endpoints
+
+All the APIs created with Amazon API Gateway expose HTTPS endpoints only. Amazon API Gateway does not support unencrypted (HTTP) endpoints.
+
+
+### 2. Application Load Balancer endpoints
+
+For Application Load Balancers (ALBs), encryption in transit is enforced by [configuring an HTTPS listener](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html) on your load balancer.
+
+### 3. Lambda Function URLs
+
+[Lambda Function URLs](https://docs.aws.amazon.com/lambda/latest/dg/urls-configuration.html) are HTTPS endpoints by default, ensuring encryption in transit.
+
+### 4. CloudFront
+
+Configure secure protocols in edge services. To enforce HTTPS:
 - In the CloudFront console select your distribution and go to the:
-  - Behaviors tab and edit the desired behavior and set Viewer Protocol Policy to HTTPS Only
-  - Origins tab and edit the origin and set the Origin Protocol Policy to HTTPS Only
+    - Behaviors tab and edit the desired behavior and set Viewer Protocol Policy to HTTPS Only (connections are encrypted when CloudFront communicates with viewers)
+    - Origins tab and edit the origin and set the Origin Protocol Policy to HTTPS Only (connections are encrypted when CloudFront communicates with your origin)
+
+To serve secure content over SSL/TLS, CloudFront requires that SSL/TLS certificates be installed on either the CloudFront distribution or on the backed content source. [ACM is integrated with CloudFront](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-procedures.html#cnames-and-https-updating-cloudfront) to deploy ACM certificates on the CloudFront distribution.
+
+Important:
+- It is recommended that ACM is used to provision, manage, and deploy SSL/TLS certificates on AWS managed resources but beware that in an ACM certificate must be requested in the US East (N. Virginia) Region.
+
+
+## Traffic encryption in processes that make requests to external endpoints over the Internet
+
+### 1. Lambda
+
+Outbound HTTPS Calls:
+- Only use the HTTPS endpoints to make HTTP requests to external endpoints using tools like Axios.
+
+Secure sensitive data in environment variables:
+- [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/retrieving-secrets_lambda.html)
+  - Store sensitive data in Secrets Manager and retrieve it at runtime. This method offloads the decryption and key rotation responsibilities to a dedicated service.
+
+- [Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-integration-lambda-extensions.html)
+  - Use AWS Systems Manager Parameter Store (type of parameter SecureString) to securely store and retrieve sensitive configuration values.
+
+- [Encryption in transit](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars-encryption.html)
+    - For additional security, you can enable helpers for encryption in transit, which ensures that your environment variables are encrypted client-side for protection in transit.
 
 ### 2. S3
 
@@ -213,7 +253,3 @@ public static final String OBJECT_KEY = appendTestSuffix("async-client-example")
     }
 }
   ```
-
-### 3. AWS Certificate Manager (ACM)
-
-ACM allows you to provision, manage, and deploy public TLS certificates for use with AWS services.
