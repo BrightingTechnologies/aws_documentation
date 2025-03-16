@@ -44,7 +44,7 @@ A disaster is declared when the incident exceeds the organization's ability to r
 
 ## 1. **Backup and Restore**
 ### Description
-- This is the simplest disaster recovery approach where data and application backups are regularly taken and stored in a secure location (e.g., Amazon S3, Glacier, or offsite storage).
+- This is the simplest disaster recovery approach where data and application backups are regularly taken and stored in a secure location (e.g., Amazon S3, Glacier, or offsite storage or multiple regions).
 - In the event of an outage, these backups are used to restore systems in a new or existing environment.
 
 ### RTO & RPO

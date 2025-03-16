@@ -6,7 +6,6 @@
    1. [Define RTO and RPO Targets](#1-define-rto-and-rpo-targets)
    2. [Core Component Recovery Process](#2-core-component-recovery-process)
    3. [Customer Awareness and Communication](#3-customer-awareness-and-communication)
-3. [Conclusion](#conclusion)
 
 ## Overview
 This document outlines the process for establishing workload resilience, including setting Recovery Time Objective (RTO) and Recovery Point Objective (RPO) targets, explaining the recovery process for core architectural components, and ensuring customer awareness and communication on these topics. While customer acceptance and adoption of RTO/RPO are not required, discussing resilience considerations with the customer is essential.
@@ -45,6 +44,3 @@ To ensure workload resilience, the following steps should be taken:
    - **Establish Incident Reporting and Response Procedures:**
      - Implement a support ticketing system for tracking issues.
      - Set up automated alerts to notify customers of recovery progress.
-
-## Conclusion
-By following these concrete steps—defining RTO/RPO, implementing structured recovery processes, and maintaining proactive customer communication—organizations can enhance workload resilience and ensure business continuity in case of failure or disaster.
