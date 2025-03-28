@@ -10,51 +10,36 @@ Welcome to the Brighting AWS Documentation repository. This collection aims to p
 
 To get started, browse through the documents listed below. Each document covers a specific topic and includes detailed instructions and best practices.
 
-## Content
+## Contents
 
-Content is to be updated as documents are created
+**Governance**
 
-## Legend
+- [Organization Structure](./account_governance/organization_structure.md)
+- [New Account Setup](./account_governance/new_account_setup.md)
+- [Cloud Trail Setup](./account_governance/cloud_trail.md)
 
-- **X** - Done
-- **Y** - Partial
+**Security**
 
-## Documents to Create
+- [IAM Best Practices](./security/iam_best_practices.md)
+- [Account Access](./security/account_access.md)
 
-- [x] **IAM Best Practices**  
-       (Temp credentials, Programmatic access, Identities)  
-       [Link](https://app.clickup.com/t/86c1k94t1)
+**Encryption**
 
-- [x] **AWS Governance**  
-      (Root account usage, MFA setup, contact details, CloudTrail logs and CloudTrail logs protection)  
-      [Link](https://app.clickup.com/t/86c1k8h1z)
+- [Encryption at Rest](./encryption/encryption_at_rest.md)
+- [Encryption in Transit](./encryption/encyption_in_transit.md)
 
-- [ ] **Workload KPIs**  
-       (Collecting, analyzing and defining metrics, exporting logs, Defining threshold operational metrics)  
-       [Link](https://app.clickup.com/t/86c1k7d2j)
+**Disaster Recovery**
 
-- [ ] **Runbooks**  
-       (Regarding the topic above)  
-       [Link](https://app.clickup.com/t/86c1k9dka)
+- [Disaster Recovery Strategies](./disaster_recovery/disaster_recovery_strategies.md)
+- [Resilience Objectives](./disaster_recovery/resilience_objectives.md)
 
-- [ ] **Deployment Checklist Example**  
-       [Link](https://app.clickup.com/t/86c1k9eew)
+**Deployment**
 
-- [ ] **VPC Best Practices**  
-       (Security groups between VPC and Internet and between VPCs, ACLs for inbound/outbound traffic restrict, Other AWS Service for network security)  
-       [Link](https://app.clickup.com/t/86c1k9f95)
+- [Deployment Readiness Checklist](./deployment/deployment_readiness_checklist.md)
 
-- [ ] **Data Encryption**  
-       [Link](https://app.clickup.com/t/86c1k9g1v)
+**VPC**
 
-- [ ] **Deployment Automation and Infrastructure as Code**  
-       [Link](https://app.clickup.com/t/86c1k9m7d)
-
-- [ ] **RTO and RPO Targets, Recovery Processes, Customer Awareness and Communication**  
-       [Link](https://app.clickup.com/t/86c1k9ne0)
-
-- [ ] **Cost Management**  
-       [Link](https://app.clickup.com/t/86c1k9pk7)
+- [VPC Best Practices](./vpc/vpc.md)
 
 ## Contributing
 
