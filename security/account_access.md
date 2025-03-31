@@ -13,6 +13,8 @@
      - [Obtain Temporary Credentials from AWS Identity Center](#221-obtain-temporary-credentials-from-aws-identity-center)
      - [Copy the Temporary Credentials](#222-copy-the-temporary-credentials)
      - [Configure AWS CLI with Temporary Credentials](#223-configure-aws-cli-with-temporary-credentials)
+3. [Root Access](#3-configure-aws-cli-for-aws-identity-center)
+    - [When to use Root Access](#31-when-to-use-the-aws-root-account)
 
 ## Logging in to AWS Console
 
@@ -80,3 +82,18 @@ Steps to Follow:
   ```bash
   aws s3 ls
   ```
+
+# Root Access
+
+Root Access should be used only for essential administrative tasks that cannot be performed with IAM user or Identity Center
+
+## 3.1 When to Use the AWS Root Account
+- Setting Up AWS Organizations & Control Tower – Creating organizational units (OUs) and enabling AWS Control Tower.
+
+- Billing & Account Management – Changing payment settings, closing the account, or viewing certain account details.
+
+- Enabling/Disabling AWS Services – Some services like AWS IAM Access Analyzer and AWS Shield Advanced require root access for activation.
+
+- Rotating Root Account Credentials – Updating or disabling the root password, access keys, and MFA settings.
+
+- Requesting AWS Support for Critical Issues – Some AWS Support cases require root verification.
