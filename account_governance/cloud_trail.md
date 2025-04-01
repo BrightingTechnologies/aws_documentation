@@ -29,37 +29,53 @@ AWS CloudTrail plays a critical role in security monitoring and incident respons
 - **Monitoring CloudTrail Logs with AWS Config and GuardDuty:** Detects suspicious activities such as API calls from unexpected locations.
 - **Setting Up Alerts for Anomalous Activity:** Using AWS CloudWatch Alarms to trigger notifications when critical changes occur.
 
-## Step 1: Create a CloudTrail
-
-1. **Navigate to the AWS CloudTrail Console**
-   - Open the AWS Management Console.
-   - Go to **CloudTrail** or visit [CloudTrail Console](https://console.aws.amazon.com/cloudtrail/).
-2. **Create a New Trail**
-   - Click **Create trail**.
-   - Enter a **Trail Name** (e.g., `SecurityAuditTrail`).
-3. **Choose Trail Scope**
-   - Enable **Enable for all accounts in my organisations** (if using AWS Organizations).
-4. **Choose S3 Bucket**
-   - Select S3 bucket and select encryption with existing or new key
-5. **Enable Log file validation**
-6. **Enable Event Logging**
-
-   - Select **Management Events** → Choose **Read/Write events** (`All` for full tracking).
-   - (Optional) Enable **Data Events** for:
-     - **S3:** To track object-level access.
-     - **Lambda:** To track function execution.
-
-7. Click **Next**, review settings, and then click **Create trail**.
-
 ---
 
-## Step 2: Store Logs in an S3 Bucket
+## Step 1: Create log destination
+
+Ideally log bucket will be placed in a Security account
 
 1. **Choose or Create an S3 Bucket**
 
    - Select an existing bucket or create a new one (e.g., `aws-cloudtrail-logs-youraccount`).
    - Ensure the bucket is in a secure AWS region.
-
+   - Ideally create the bucket in the Audit/Security account. In order to allow log writes attach a policy to this bucket
+   ```json
+   {
+      "Version": "2012-10-17",
+      "Statement": [
+         {
+               "Sid": "AWSCloudTrailAclCheck20150319",
+               "Effect": "Allow",
+               "Principal": {
+                  "Service": "cloudtrail.amazonaws.com"
+               },
+               "Action": "s3:GetBucketAcl",
+               "Resource": "arn:aws:s3:::personal-cloud-trail-logs"
+         },
+         {
+               "Sid": "AWSCloudTrailWrite20150319",
+               "Effect": "Allow",
+               "Principal": {
+                  "Service": "cloudtrail.amazonaws.com"
+               },
+               "Action": "s3:PutObject",
+               "Resource": "arn:aws:s3:::personal-cloud-trail-logs/AWSLogs/*",
+               "Condition": {
+                  "StringEquals": {
+                     "s3:x-amz-acl": "bucket-owner-full-control",
+                     "aws:SourceOrgID": "YOUR_ORG_ID"
+                  }
+               }
+         }
+      ]
+   }
+   ```
+   Org ID can be obtained by:
+   ```bash
+   aws organizations describe-organization --query 'Organization.Id' --output text
+   ```
+   Or by looking it up in the AWS Organizations Console
 2. **Enable Encryption and Security**
 
    - Enable **Server-Side Encryption (SSE-KMS)**.
@@ -71,7 +87,7 @@ AWS CloudTrail plays a critical role in security monitoring and incident respons
 
 ---
 
-## Step 3: Apply an S3 Bucket Policy to Prevent Deletion
+## Step 2: Apply an S3 Bucket Policy to Prevent Deletion
 
 1. **Go to the S3 Console**
 
@@ -103,8 +119,103 @@ AWS CloudTrail plays a critical role in security monitoring and incident respons
    - Replace `YOUR_ACCOUNT_ID` with your AWS Account ID.
    - Replace `AdminRole` with an IAM role that can manage logs.
 
+   or if using Organizations
+
+   Add SCP to the OU that prevents deletion of the cloudtrail. If you are not using Organizations this policy can be attached to any user or user group
+
+   ```json
+   {
+      "Version": "2012-10-17",
+      "Statement": [
+         {
+               "Sid": "ProtectCloudTrail",
+               "Effect": "Deny",
+               "Action": [
+                  "cloudtrail:DeleteTrail",
+                  "cloudtrail:StopLogging",
+                  "cloudtrail:UpdateTrail",
+                  "cloudtrail:PutEventSelectors",
+                  "cloudtrail:DeleteEventSelectors"
+               ],
+               "Resource": "*"
+         }
+      ]
+   }
+
+   ```
+
+   Add another SCP to the OU to protect the log bucket
+
+   ```json
+   {
+      "Version": "2012-10-17",
+      "Statement": [
+         {
+               "Sid": "ProtectCloudTrailBucket",
+               "Effect": "Deny",
+               "Action": [
+                  "s3:DeleteObject",
+                  "s3:DeleteObjectVersion",
+                  "s3:DeleteBucket",
+                  "s3:DeleteBucketPolicy",
+                  "s3:PutBucketPolicy"
+               ],
+               "Resource": [
+                  "arn:aws:s3:::your-cloudtrail-bucket",
+                  "arn:aws:s3:::your-cloudtrail-bucket/*"
+               ]
+         }
+      ]
+   }
+   ```
+
 3. Click **Save** to apply the policy.
 
----
+## Step 3: Create a CloudTrail
 
-This setup ensures CloudTrail logs are **stored securely**, **cannot be accidentally deleted**, and **maintain compliance with security best practices**.
+1. **Navigate to the AWS CloudTrail Console**
+   - Open the AWS Management Console.
+   - Go to **CloudTrail** or visit [CloudTrail Console](https://console.aws.amazon.com/cloudtrail/).
+2. **Create a New Trail**
+   - Click **Create trail**.
+   - Enter a **Trail Name** (e.g., `SecurityAuditTrail`).
+3. **Choose Trail Scope**
+   - Enable **Enable for all accounts in my organisations** (if using AWS Organizations).
+4. **Choose S3 Bucket**
+   - Select S3 bucket and select encryption with existing or new key
+   - If a bucket is in different account Browse button will not work. Just enter the name of the bucket
+5. **Enable Log file validation**
+6. **Enable Event Logging**
+
+   - Select **Management Events** → Choose **Read/Write events** (`All` for full tracking).
+   - (Optional) Enable **Data Events** for:
+     - **S3:** To track object-level access.
+     - **Lambda:** To track function execution.
+
+7. Click **Next**, review settings, and then click **Create trail**.
+
+# Additional CloudTrails for Data Access Logging
+
+You can create additional CloudTrails within specific AWS accounts when you need to:
+
+1. Monitor data access events separately from management events
+2. Track specific S3 bucket or Lambda function activity
+3. Meet compliance requirements for certain workloads
+
+Key considerations:
+- Each additional trail may incur extra costs
+- You can create up to 5 trails per region
+- Data events are not enabled by default
+- Trails can be configured to log to separate or shared S3 buckets
+
+Best practice: Create additional trails only when you need granular control over data event logging, keeping in mind that organization-wide trails already capture management events.
+
+
+
+## Notes
+
+- SCPs cannot be applied to a management account.
+- Admins in the management account can delete both
+- S3 bucket and cloudtrail even tho they are protected, because Admins can go pass these protections
+- SCPs apply to Admins in the non-management accounts
+- You can create additional cloud trails in the specific account to log data access where needed
