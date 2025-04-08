@@ -100,7 +100,6 @@ The customer typically covers:
 
 For the core services setup refer to the following documents
 
-- IAM Identity Center configuration ( TODO )
 - [CloudTrail setup and logging enablement](./cloud_trail.md)
 - [AWS Organizations implementation](./organization_structure.md)
 
