@@ -17,8 +17,8 @@
    - [Why Assume a Role](#31-why-assume-a-role)
    - [How to Assume a Role via CLI](#32-how-to-assume-a-role-via-cli)
    - [Common Use Cases](#33-common-use-cases)
-
----
+4. [Root Access](#4-root-access)
+   - [When to use Root Access](#31-when-to-use-the-aws-root-account)
 
 ## Logging in to AWS Console
 
@@ -284,3 +284,19 @@ export AWS_SESSION_TOKEN=...
 ---
 
 Let us know if you need examples in Terraform, CDK, or IAM policy templates to configure trust relationships or permissions.
+
+# Root Access
+
+Root Access should be used only for essential administrative tasks that cannot be performed with IAM user or Identity Center
+
+## 3.1 When to Use the AWS Root Account
+
+- Setting Up AWS Organizations & Control Tower – Creating organizational units (OUs) and enabling AWS Control Tower.
+
+- Billing & Account Management – Changing payment settings, closing the account, or viewing certain account details.
+
+- Enabling/Disabling AWS Services – Some services like AWS IAM Access Analyzer and AWS Shield Advanced require root access for activation.
+
+- Rotating Root Account Credentials – Updating or disabling the root password, access keys, and MFA settings.
+
+- Requesting AWS Support for Critical Issues – Some AWS Support cases require root verification.
