@@ -65,7 +65,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### AWS Lambda Functions
+#### AWS Lambda Functions
 
 - **Execution Metrics:**
     - **Expected Number of Invocations:**
@@ -92,7 +92,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### API Gateway
+#### API Gateway
 
 - **API Calls:**
     - **Number of Endpoints & Requests:**
@@ -107,7 +107,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### CloudWatch
+#### CloudWatch
 
 - **Logging & Metrics:**
     - **Log Ingestion Volume:**
@@ -121,7 +121,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### CodeBuild
+#### CodeBuild
 
 - **Build Environment:**
     - **Build Minutes:**
@@ -133,7 +133,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### VPC (Virtual Private Cloud)
+#### VPC (Virtual Private Cloud)
 
 - **Network Resources:**
     - **NAT Gateway and VPC Endpoints:**
@@ -146,7 +146,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### SQS (Simple Queue Service)
+#### SQS (Simple Queue Service)
 
 - **Message Processing:**
     - **Message Volume:**
@@ -161,7 +161,7 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 
 ---
 
-### Secrets Manager & SSM Parameter Store
+#### Secrets Manager & SSM Parameter Store
 
 - **Secret/Parameter Management:**
     - **Number of Secrets/Parameters Stored:**
@@ -171,7 +171,6 @@ This document presents a comprehensive cost optimization analysis for the fulfil
 - **Additional Charges:**
     - **KMS (Key Management Service) Usage:**
         - Costs associated with API calls if using KMS for encryption.
-
 
 ---
 
@@ -399,7 +398,7 @@ By mapping out this streamlined workflow, the fulfillment service achieves a mor
 ## 5. Conclusion
 
 This cost optimization analysis provides a comprehensive view of the fulfillment service solution in the eu‑central‑1 region:
-- **Inputs:** Detailed metrics for DynamoDB (on‑demand), Lambda functions, API Gateway, CloudWatch, CodeBuild, VPC, SQS, Secrets Manager, and SSM Parameter Store.
+- **Inputs:** Detailed metrics for DynamoDB, Lambda functions, API Gateway, CloudWatch, CodeBuild, VPC, SQS, Secrets Manager.
 - **Estimation:**  
   The annual cost is approximated at **~$2,693.28** based on current usage metrics.
 - **Business Value:**  
