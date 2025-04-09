@@ -401,7 +401,7 @@ By mapping out this streamlined workflow, the fulfillment service achieves a mor
 This cost optimization analysis provides a comprehensive view of the fulfillment service solution in the eu‑central‑1 region:
 - **Inputs:** Detailed metrics for DynamoDB (on‑demand), Lambda functions, API Gateway, CloudWatch, CodeBuild, VPC, SQS, Secrets Manager, and SSM Parameter Store.
 - **Estimation:**  
-  The annual cost is approximated at **~$2,357.30** based on current usage metrics.
+  The annual cost is approximated at **~$2,693.28** based on current usage metrics.
 - **Business Value:**  
   The solution delivers significant benefits in cost efficiency, scalability, operational agility, and overall system reliability.
 
